@@ -13,6 +13,7 @@
 @interface ELCAlbumPickerController ()
 
 @property (nonatomic, strong) ALAssetsLibrary *library;
+@property (nonatomic, assign) BOOL tableIsReloaded;
 
 @end
 
@@ -26,6 +27,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _tableIsReloaded = NO;
+    
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	
 	[self.navigationItem setTitle:NSLocalizedString(@"Loading...", nil)];
@@ -55,15 +59,24 @@
                 NSString *sGroupPropertyName = (NSString *)[group valueForProperty:ALAssetsGroupPropertyName];
                 NSUInteger nType = [[group valueForProperty:ALAssetsGroupPropertyType] intValue];
                 
-                if ([[sGroupPropertyName lowercaseString] isEqualToString:@"camera roll"] && nType == ALAssetsGroupSavedPhotos) {
-                    [self.assetGroups insertObject:group atIndex:0];
+                [group setAssetsFilter:[self assetFilter]];
+                
+                BOOL needToReload = NO;
+                
+                if (group.numberOfAssets > 0) {
+                    if ([[sGroupPropertyName lowercaseString] isEqualToString:@"camera roll"] && nType == ALAssetsGroupSavedPhotos) {
+                        [self.assetGroups insertObject:group atIndex:0];
+                    }
+                    else {
+                        [self.assetGroups addObject:group];
+                    }
+                    needToReload = YES;
                 }
-                else {
-                    [self.assetGroups addObject:group];
+                
+                if (needToReload || !self.tableIsReloaded) {
+                    // Reload albums
+                    [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
                 }
-
-                // Reload albums
-                [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
             };
             
             // Group Enumerator Failure Block
@@ -105,7 +118,8 @@
 
 - (void)reloadTableView
 {
-	[self.tableView reloadData];
+    _tableIsReloaded = YES;
+    [self.tableView reloadData];
 	[self.navigationItem setTitle:NSLocalizedString(@"Select an Album", nil)];
 }
 
