@@ -142,14 +142,17 @@
 - (void)layoutSubviews
 {
     int c = (int32_t)self.rowAssets.count;
-    CGFloat totalWidth = c * 75 + (c - 1) * 4;
-    CGFloat startX;
+    CGFloat totalWidth = c * 75;
     
-    if (self.alignmentLeft) {
-        startX = 4;
-    }else {
-        startX = (self.bounds.size.width - totalWidth) / 2;
-    }
+    static CGFloat scale;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        scale = [[UIScreen mainScreen] scale];
+    });
+    
+    CGFloat cellsSpacing = (self.bounds.size.width - totalWidth) / (c + 1);
+    cellsSpacing = ceil(scale*cellsSpacing)/scale;
+    CGFloat startX = cellsSpacing;
     
 	CGRect frame = CGRectMake(startX, 2, 75, 75);
     CGRect durationFrame = CGRectMake(32.0, 56.0, 40.0, 19.0);    
@@ -167,7 +170,7 @@
         [durationLabel setFrame:durationFrame];
         [overlayView addSubview:durationLabel];
 		
-		frame.origin.x = frame.origin.x + frame.size.width + 4;
+		frame.origin.x = frame.origin.x + frame.size.width + cellsSpacing;
 	}
 }
 
