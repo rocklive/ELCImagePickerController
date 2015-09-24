@@ -152,7 +152,7 @@
     }
     
 	CGRect frame = CGRectMake(startX, 2, 75, 75);
-    CGRect durationFrame = CGRectMake(32.0, 55.0, 40.0, 20.0);    
+    CGRect durationFrame = CGRectMake(32.0, 56.0, 40.0, 19.0);    
 	
 	for (int i = 0; i < [_rowAssets count]; ++i) {
 		UIImageView *imageView = [_imageViewArray objectAtIndex:i];
