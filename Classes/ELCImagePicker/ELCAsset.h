@@ -27,6 +27,9 @@
 @property (nonatomic, assign) BOOL selected;
 @property (nonatomic,assign) int index;
 
+@property (readonly) NSString *assetType; //ALAssetTypePhoto, ALAssetTypeVideo, ALAssetTypeUnknown
+@property (readonly) NSTimeInterval duration;
+
 - (id)initWithAsset:(ALAsset *)asset;
 - (NSComparisonResult)compareWithIndex:(ELCAsset *)_ass;
 @end

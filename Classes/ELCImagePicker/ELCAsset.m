@@ -70,5 +70,13 @@
     return NSOrderedSame;
 }
 
+- (NSString *)assetType {
+    return [self.asset valueForProperty:ALAssetPropertyType];
+}
+
+- (NSTimeInterval)duration {
+    return [[self.asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+}
+
 @end
 
