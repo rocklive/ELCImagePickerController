@@ -154,6 +154,15 @@
     }
 }
 
+- (NSString*)nameForAssetsGroup:(ALAssetsGroup*)group {
+    NSString * name = [group valueForProperty:ALAssetsGroupPropertyName];
+    
+    if ([[name lowercaseString] isEqualToString:@"all photos"]) {
+        return @"Videos";
+    }
+    return name;
+}
+
 #pragma mark -
 #pragma mark Table view data source
 
@@ -186,7 +195,7 @@
     [g setAssetsFilter:[self assetFilter]];
     NSInteger gCount = [g numberOfAssets];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%ld)",[g valueForProperty:ALAssetsGroupPropertyName], (long)gCount];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%ld)", [self nameForAssetsGroup:g], (long)gCount];
     UIImage* image = [UIImage imageWithCGImage:[g posterImage]];
     image = [self resize:image to:CGSizeMake(78, 78)];
     [cell.imageView setImage:image];
