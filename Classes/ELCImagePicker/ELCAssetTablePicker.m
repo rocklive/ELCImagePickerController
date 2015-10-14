@@ -57,7 +57,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.columns = [[UIScreen mainScreen] bounds].size.width / 80;
+    self.columns = self.view.bounds.size.width / 80;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
